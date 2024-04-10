@@ -2,33 +2,39 @@ import React, { useState, useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-/* Category */
 import Category from "./Category";
 
-/* Services */
 import { getCategories } from "../../services/services";
 
 export default function Categories() {
   const navigate = useNavigate();
-
   const [categories, setCategories] = useState([]);
-
-  const fetchCategories = async () => {
-    try {
-      const response = await getCategories();
-      setCategories(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await getCategories();
+        if (Array.isArray(response.data)) {
+          setCategories(response.data);
+        } else {
+          throw new Error("Response data is not an array");
+        }
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+
     fetchCategories();
   }, []);
 
   const handleSelectCategory = async (categoryName) => {
     navigate(`/products?categoryName=${categoryName}`);
   };
+
+  if (error) {
+    return <div>error: {error}</div>;
+  }
 
   return (
     <div>

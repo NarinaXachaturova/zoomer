@@ -36,6 +36,10 @@ export default function Header() {
   const handleLogin = () => setIsLoggedIn(true);
   const handleProfilePage = () => navigate("/profile");
 
+  const cartItemCount = Array.isArray(cartProducts)
+    ? cartProducts.reduce((total, item) => total + item.count, 0)
+    : 0;
+
   return (
     <header
       className={`sticky ${
@@ -50,7 +54,6 @@ export default function Header() {
               *7007 / +995 (32) 2 60 30 60
             </span>
           </div>
-
           <div className="text-[#faccbd] flex gap-4 text-[12px] font-bold">
             <Link to="/page1" className="hover:text-white dark:text-white">
               {t("header.shopPolicy")}
@@ -76,7 +79,6 @@ export default function Header() {
           </div>
         </div>
       </div>
-
       <div className="bg-lightgrey dark:bg-black w-full lg:w-[100%] h-[70px] flex justify-center lg:h-[70px] items-center">
         <div className="container flex flex-row items-center justify-between">
           <div>
@@ -100,9 +102,7 @@ export default function Header() {
                 {t("header.navigation")}
               </Button>
             </Link>
-
             <Search />
-
             <div className="flex items-center gap-4 relative">
               <Link to="/cart">
                 <Button
@@ -113,11 +113,9 @@ export default function Header() {
                   {t("header.cart")}
                 </Button>
               </Link>
-
               <span className="bg-primary text-white text-[15px] rounded-[50px] top-[-10px] right-[140px] w-[22px] h-[22px] relative text-center">
-                {cartProducts.reduce((total, item) => total + item.count, 0)}
+                {cartItemCount}
               </span>
-
               {localStorage.getItem("accessToken") ? (
                 <Button
                   className="bg-white text-black sm:w-[90px] lg:w-[130px]"
